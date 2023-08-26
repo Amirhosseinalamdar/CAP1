@@ -13,3 +13,21 @@ In addition to all above works, we handled RAW hazard so if you read from a regi
 Only hazard that may happen is when you load something to a register from memory and immidiately use the value of that register in the next instruction.
 This won't work because when you are loading the value from memory, you need that value in the alu at the same time.
 
+Most important tests that worked correctly:
+```
+00400000: <main> ; <input:1> main:
+00400000: 201004d2 ; <input:2> addi $s0, $zero, 1234
+00400014: ac100008 ; <input:7> sw $s0, 8($zero)
+00400018: 14100001 ; <input:8> bne $zero, $s0, next
+0040001c: 02008820 ; <input:9> add $s1, $s0, $zero
+00400020: <next> ; <input:10> next:
+00400020: 02009020 ; <input:11> add $s2, $s0, $zero
+```
+
+```
+00400000: <main> ; <input:0> main:
+00400000: 10000002 ; <input:1> beq $zero, $zero, chert
+00400004: 14000001 ; <input:2> bne $zero, $zero, chert
+00400008: 00000000 ; <input:3> sll $zero, $zero, 0
+0040000c: <chert> ; <input:4> chert:
+```
